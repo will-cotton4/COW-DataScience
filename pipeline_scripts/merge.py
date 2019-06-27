@@ -22,7 +22,9 @@ def merge_nmc_war_trade_alliance(nmc, war, trade, alliance):
     nmc_war_trade_alliance = pd.merge(left=nmc_war_trade, right=alliance_df, left_on=['ccode',
                                       'year'], right_on=['ccode', 'year'], how='left')
 
-    nmc_war_trade_alliance = nmc_war_trade_alliance[['StateNme', 'ccode', 'year', 'irst', 'milex', 'milper', 'pec', 'tpop',
+    nmc_war_trade_alliance['conflict'] = nmc_war_trade_alliance['warnum'].isna() == False
+
+    nmc_war_trade_alliance = nmc_war_trade_alliance[['conflict', 'StateNme', 'ccode', 'year', 'irst', 'milex', 'milper', 'pec', 'tpop',
        'upop', 'cinc', 'warnum', 'outcomea', 'batdtha', 'batdths',
        'imports', 'exports', 'surplus', 'expt_past_yr', 'expt_past_5_yrs',
        'impt_past_yr', 'impt_past_5_yrs', 'ccode2', 'left_censor',

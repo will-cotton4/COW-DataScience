@@ -11,9 +11,11 @@ from merge import nmc_war_trade_alliance
 
 xgboost_model = XGBClassifier(n_jobs=-1, random_state=42)
 
-leaks = ['warnum','conflict', 'outcomea', 'batdtha' ,'batdths', 'StateNme', 'right_censor']
+leaks = ['warnum', 'conflict', 'outcomea', 'batdtha' ,'batdths', 'StateNme', 'right_censor']
 
 train = nmc_war_trade_alliance[nmc_war_trade_alliance['year'] < 1987]
+# DEBUG STATEMENT
+print('TRAIN COLUMNS: ', train.columns)
 X_train = train.drop(columns=leaks)
 y_train = train['conflict']
 

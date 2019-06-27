@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 
 
-URLS = {"NMC_URL": "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/NMC_v4_0.csv",
-        "DYADIC_WAR_URL": "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/directed_dyadic_war.csv",
-        "COUNTRY_CODES_URL": "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/COW%20country%20codes.csv",
-        "TRADE_URL": "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/National_COW_4.0.csv",
+URLS = {"NMC_URL": "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/data/NMC_v4_0.csv",
+        "DYADIC_WAR_URL": "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/data/directed_dyadic_war.csv",
+        "COUNTRY_CODES_URL": "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/data/COW%20country%20codes.csv",
+        "TRADE_URL": "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/data/National_COW_4.0.csv",
         "ALLIANCE_URL": "https://raw.githubusercontent.com/beverast/COW-DataScience/master/data/engineered_dyads_yearly.csv",
         "COUNTRIES_JSON_URL": "https://raw.githubusercontent.com/will-cotton4/COW-DataScience/master/countries.json",}
 
@@ -18,7 +18,7 @@ df_ff.iloc[10569:10570][['tpop', 'upop']] = df_ff.iloc[10568:10569][['tpop', 'up
 nmc_clean = df_ff.fillna(method='ffill').drop(columns='stateabb')
 
 # READ DYADIC WAR DATA
-dyadic_cols_to_keep = ['statea', 'warnum', 'ccode', 'year', 'outcomea', 'batdtha', 'batdths']
+dyadic_cols_to_keep = ['statea', 'warnum', 'year', 'outcomea', 'batdtha', 'batdths']
 dyadic_war_df = pd.read_csv(URLS["DYADIC_WAR_URL"], usecols=dyadic_cols_to_keep)
 dyadic_war_df = dyadic_war_df.rename(columns={'statea': 'ccode'})
 
@@ -100,7 +100,10 @@ def clean_alliance(df):
     df = df.copy()
 
     leaks = ['alliance_time', 'dyad_end_year']
-    df = df.drop(columns=leaks)
+
+    # DEBUG PRINT
+    # print(df.columns)
+    # df = df.drop(columns=leaks)
 
     df = df.rename(columns={'ccode1': 'ccode'})
     return df
