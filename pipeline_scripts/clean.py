@@ -91,27 +91,12 @@ trade_df = pd.read_csv(URLS["TRADE_URL"])
 natl_trade = clean_natl_trade(trade_df)
 natl_trade = natl_trade.drop(columns=['statename'])
 
-def clean_alliance(df):
-    """
-    Cleans the alliance dataset:
-    - Removes leaky/extraneous variables
-    - Renames ccode
-    """
-    df = df.copy()
-
-    leaks = ['alliance_time', 'dyad_end_year']
-
-    # DEBUG PRINT
-    # print(df.columns)
-    # df = df.drop(columns=leaks)
-
-    df = df.rename(columns={'ccode1': 'ccode'})
-    return df
 
 # READ AND CLEAN ALLIANCE DATA
 alliance_cols_to_keep = ['ccode1', 'year', 'ccode2', 'left_censor', 'right_censor', 'defense', 'neutrality', 'nonaggression', 'entente']
 alliance_df = pd.read_csv(URLS["ALLIANCE_URL"], usecols=alliance_cols_to_keep)
-alliance_df = clean_alliance(alliance_df)
+alliance_df = alliance_df.rename(columns={'ccode1': 'ccode'})
+
 
 # READ AND CLEAN countries.json
 countries_json = pd.read_json(URLS["COUNTRIES_JSON_URL"])
@@ -128,10 +113,3 @@ countries_dict = {'United States': 'United States of America',
                   'Timor-Leste': 'East Timor',
                   'Micronesia': 'Federated States of Micronesia'}
 countries_json = countries_json.replace(countries_dict)
-
-# countries_list = list(countries_json['StateNme'].value_counts().keys())
-# tested_countries = list(tested_countries)
-# missing_countries = []
-# for country in sorted(tested_countries):
-#     if country not in sorted(countries_list):
-#         missing_countries.append(country)
