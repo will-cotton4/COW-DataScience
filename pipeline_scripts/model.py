@@ -2,12 +2,13 @@
 This module imports the cleaned and merged data 
 and runs an XGBoost model on it.
 """
-import pandas as pd
 import numpy as np
-from sklearn.model_selection import cross_val_score, train_test_split
+import pandas as pd
 from sklearn.metrics import accuracy_score
-from xgboost import XGBClassifier
+from sklearn.model_selection import cross_val_score, train_test_split
+
 from merge import nmc_war_trade_alliance
+from xgboost import XGBClassifier
 
 xgboost_model = XGBClassifier(n_jobs=-1, random_state=42)
 
@@ -27,3 +28,5 @@ xgboost_model.fit(X_train, y_train)
 
 predictions = xgboost_model.predict(X_test)
 probs = xgboost_model.predict_proba(X_test)
+
+print("Accuracy score: {}%".format(round(accuracy_score(predictions, y_test)*100, 2)))

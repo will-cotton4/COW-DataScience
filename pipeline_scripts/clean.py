@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 
-
 # DATA URLS
 # "NMC_URL":              "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/data/NMC_v4_0.csv"
 # "DYADIC_WAR_URL":       "https://raw.githubusercontent.com/NicoMontoya/COW-DataScience/master/data/directed_dyadic_war.csv"
@@ -11,7 +10,7 @@ import pandas as pd
 # "COUNTRIES_JSON_URL":   "https://raw.githubusercontent.com/will-cotton4/COW-DataScience/master/countries.json"
 
 # READ NMC "Material" DATA
-nmc_df = pd.read_csv("./data/NMC_v4_0.csv")
+nmc_df = pd.read_csv("../data/NMC_v4_0.csv")
 
 # IMPUTE NMC NaNs
 df_ff = nmc_df.fillna(method='bfill')
@@ -20,12 +19,12 @@ nmc_clean = df_ff.fillna(method='ffill').drop(columns='stateabb')
 
 # READ DYADIC WAR DATA
 dyadic_cols_to_keep = ['statea', 'warnum', 'year', 'outcomea', 'batdtha', 'batdths']
-dyadic_war_df = pd.read_csv("./data/directed_dyadic_war.csv", usecols=dyadic_cols_to_keep)
+dyadic_war_df = pd.read_csv("../data/directed_dyadic_war.csv", usecols=dyadic_cols_to_keep)
 dyadic_war_df = dyadic_war_df.rename(columns={'statea': 'ccode'})
 
 # READ COUNTRY CODES
 country_cols_to_keep = ['CCode', 'StateNme']
-country_codes = pd.read_csv("./data/COW_country_codes.csv", usecols=country_cols_to_keep)
+country_codes = pd.read_csv("../data/COW_country_codes.csv", usecols=country_cols_to_keep)
 country_codes = country_codes.rename(columns={'CCode':'ccode'})
 
 
@@ -36,7 +35,7 @@ def leak_fix_shift(df, cols, state_col):
     states = df[state_col].value_counts().keys()
     for col in cols:
         for state in states:
-            df[df[state_col]==state][col] = df[df[state_col]==state][col].shift(periods=1)
+            df.loc[df[state_col]==state, col] = df.loc[df[state_col]==state, col].shift(periods=1)
     return df
 
 
@@ -88,19 +87,19 @@ def clean_natl_trade(df):
 
 
 # READ AND CLEAN TRADE DATA
-trade_df = pd.read_csv("./data/National_COW_4.0.csv")
+trade_df = pd.read_csv("../data/National_COW_4.0.csv")
 natl_trade = clean_natl_trade(trade_df)
 natl_trade = natl_trade.drop(columns=['statename'])
 
 
 # READ AND CLEAN ALLIANCE DATA
 alliance_cols_to_keep = ['ccode1', 'year', 'ccode2', 'left_censor', 'right_censor', 'defense', 'neutrality', 'nonaggression', 'entente']
-alliance_df = pd.read_csv("./data/engineered_dyads_yearly.csv", usecols=alliance_cols_to_keep)
+alliance_df = pd.read_csv("../data/engineered_dyads_yearly.csv", usecols=alliance_cols_to_keep)
 alliance_df = alliance_df.rename(columns={'ccode1': 'ccode'})
 
 
 # READ AND CLEAN countries.json
-countries_json = pd.read_json("./data/countries.json")
+countries_json = pd.read_json("../data/countries.json")
 countries_json = countries_json.rename(columns={'name':'StateNme'})
 countries_dict = {'United States': 'United States of America',
                   'Saint Vincent and the Grenadines':'St. Vincent and the Grenadines',
